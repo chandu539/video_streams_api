@@ -1,0 +1,20 @@
+# Ignore dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Ignore logs
+*.log
+
+# Ignore environment files
+.env
+client/.env
+server/.env
+
+# Ignore build files
+client/build/
+server/dist/
+
+# Ignore uploaded videos (but keep the folder)
+server/uploads/*
+!server/uploads/.gitkeep

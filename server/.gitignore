@@ -1,9 +1,12 @@
-# Ignore Node modules
+# Ignore dependencies
 node_modules/
 
-# Ignore environment variable files
-.env
-.env.local
-
-# Ignore log files
+# Ignore logs
 *.log
+
+# Ignore environment files
+.env
+
+# Ignore uploaded videos (but keep the folder)
+uploads/*
+!uploads/.gitkeep
