@@ -37,7 +37,7 @@ function Upload() {
       setUploading(true);
       setError('');
 
-      await axios.post('http://localhost:5003/upload', formData, {
+      await axios.post('https://video-streams-api.vercel.app/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
