@@ -37,13 +37,11 @@ function Upload() {
       setUploading(true);
       setError('');
 
-      const response = await axios.post('http://localhost:5001/upload', formData, {
+      await axios.post('http://localhost:5003/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      
       toast.success('Video uploaded successfully!');
-      console.log("response : ",response);
       setTitle('');
       setDescription('');
       setVideo(null);
@@ -64,8 +62,8 @@ function Upload() {
       }}
     >
       <h1 className="text-5xl font-bold mb-6 text-green-600">Upload Video</h1>
-      <form onSubmit={handleSubmit} className=" p-6 rounded-lg shadow-lg w-full max-w-md">
-        <label className=" block text-2xl font-medium mb-1 text-green-950">Video Title</label>
+      <form onSubmit={handleSubmit} className="p-6 rounded-lg shadow-lg w-full max-w-md">
+        <label className="block text-2xl font-medium mb-1 text-green-950">Video Title</label>
         <input
           type="text"
           value={title}
@@ -74,7 +72,6 @@ function Upload() {
           placeholder="Enter video title"
         />
 
-        
         <label className="block text-2xl font-medium mb-1 text-green-950">Description</label>
         <textarea
           value={description}
@@ -84,7 +81,6 @@ function Upload() {
           rows="3"
         />
 
-        
         <label className="block text-2xl font-medium mb-1 text-green-950">Upload Video</label>
         <input
           type="file"
@@ -96,17 +92,15 @@ function Upload() {
         {error && <p className="text-red-500 mb-4">{error}</p>}
         {video && <p className="text-green-500 mb-4">{video.name} selected</p>}
 
-        
         <div className="flex justify-center gap-6 mt-4">
           <button
             type="submit"
             className="bg-green-400 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-40"
-            disabled={uploading} 
+            disabled={uploading}
           >
-            {uploading ? 'Uploading...' : 'Upload'} 
+            {uploading ? 'Uploading...' : 'Upload'}
           </button>
 
-          
           <Link to="/">
             <button
               type="button"
