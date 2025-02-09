@@ -7,7 +7,7 @@ const ListVideos = () => {
 
   useEffect(() => {
     axios
-      .get("https://video-streams-api.vercel.app/videos")
+      .get("http://localhost:5003/videos")
       .then((response) => setVideos(response.data))
       .catch((error) => console.error("Error fetching videos:", error));
   }, []);
