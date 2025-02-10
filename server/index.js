@@ -13,8 +13,11 @@ const MONGODB_URI = process.env.MONGODB_URI;
 
 // Middleware
 app.use(express.json());
-app.use(cors({ origin: 'https://video-streams-api-frontend.vercel.app' }));
-
+app.use(cors({
+  origin: 'https://video-streams-api-frontend.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 // MongoDB Connection
 mongoose
   .connect(MONGODB_URI)
