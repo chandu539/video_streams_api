@@ -59,13 +59,13 @@ function Upload() {
 
       if (existingVideo) {
         // Update existing video
-        await axios.put(`https://video-streams-api-backend.vercel.app/update/${existingVideo._id}`, formData, {
+        await axios.put(`https://video-streams-api-backend.vercel.app//update/${existingVideo._id}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         toast.success("Video updated successfully!");
       } else {
         // Upload new video
-        await axios.post("https://video-streams-api-backend.vercel.app/upload", formData, {
+        await axios.post("https://video-streams-api-backend.vercel.app//upload", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         toast.success("Video uploaded successfully!");
