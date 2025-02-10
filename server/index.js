@@ -14,7 +14,7 @@ const MONGODB_URI = process.env.MONGODB_URI;
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: 'https://video-streams-api-frontend.vercel.app',
+  origin: '',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
