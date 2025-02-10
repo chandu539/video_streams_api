@@ -20,7 +20,7 @@ const ListVideos = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:5003/videos/${id}`);
+      const response = await axios.delete(`https://video-streams-api-backend.vercel.app/videos/${id}`);
       console.log(response.data);  
   
       toast.success("Video deleted successfully", { duration: 5000 });
