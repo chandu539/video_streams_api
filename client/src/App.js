@@ -14,7 +14,7 @@ function App() {
           <Route path='/' element={<Home/>}/>
           <Route path='/upload' element={<Upload/>}/>
           <Route path='/videos' element={<ListVideos/>}/>
-          
+           <Route path="/upload/:id" element={<Upload />} />
         </Routes>
       </BrowserRouter>
     </div>

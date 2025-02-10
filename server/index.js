@@ -8,19 +8,12 @@ const fs = require("fs");
 const path = require("path");
 
 const app = express();
-const PORT = process.env.PORT || 5003;
+const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
 
 // Middleware
 app.use(express.json());
-app.use(
-  cors({
-    origin: "https://video-streams-api-frontend.vercel.app",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
-);
+app.use(cors());
 
 
 // MongoDB Connection
@@ -131,7 +124,7 @@ app.delete("/videos/:id", async (req, res) => {
 });
 
 
-app.put("/update/:id", upload.single("video"), async (req, res) => {
+/*app.put("/update/:id", upload.single("video"), async (req, res) => {
   try {
     const video = await Video.findById(req.params.id);
     if (!video) {
@@ -170,8 +163,43 @@ app.put("/update/:id", upload.single("video"), async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Error updating video", error });
   }
+});*/
+
+app.put("/update/:id", upload.single("video"), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description } = req.body;
+    let updateData = { title, description };
+
+    // Check if a new video file is uploaded
+    if (req.file) {
+      const video = await Video.findById(id);
+      if (!video) {
+        return res.status(404).json({ message: "Video not found" });
+      }
+
+      // Delete the old video file from the server
+      if (video.videoPath) {
+        fs.unlinkSync(video.videoPath); // Remove the old file
+      }
+
+      updateData.videoPath = req.file.path; // Update video path
+    }
+
+    // Update video details in MongoDB
+    const updatedVideo = await Video.findByIdAndUpdate(id, updateData, { new: true });
+
+    if (!updatedVideo) {
+      return res.status(404).json({ message: "Video not found" });
+    }
+
+    res.status(200).json({ message: "Video updated successfully", video: updatedVideo });
+  } catch (error) {
+    console.error("Error updating video:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 });
 
 
-app.listen(PORT, () => console.log(` Server running on port ${PORT}`));
 
+app.listen(PORT, () => console.log(` Server running on port ${PORT}`));

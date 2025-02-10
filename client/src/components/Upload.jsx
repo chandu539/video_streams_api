@@ -59,11 +59,11 @@ function Upload() {
 
       if (existingVideo) {
         // Update existing video
-        await axios.put(`https://video-streams-api.vercel.app/update/${existingVideo._id}`, formData);
+        await axios.put(`http://localhost:5000/update/${existingVideo._id}`, formData);
         toast.success("Video updated successfully!");
       } else {
         // Upload new video
-        await axios.post("https://video-streams-api.vercel.app/upload", formData);
+        await axios.post("http://localhost:5000/upload", formData);
         toast.success("Video uploaded successfully!");
       }
 

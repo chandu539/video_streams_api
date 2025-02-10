@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -13,14 +14,14 @@ const ListVideos = () => {
 
   const fetchVideos = () => {
     axios
-      .get("https://video-streams-api.vercel.app/videos")
+      .get("http://localhost:5000/videos")
       .then((response) => setVideos(response.data))
       .catch((error) => console.error("Error fetching videos:", error));
   };
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`https://video-streams-api.vercel.app/videos/${id}`);
+      const response = await axios.delete(`http://localhost:5000/videos/${id}`);
       console.log(response.data);  
   
       toast.success("Video deleted successfully", { duration: 5000 });
@@ -67,14 +68,15 @@ const ListVideos = () => {
             <h2 className="text-xl font-bold">{video.filename}</h2>
             <video width="100%" controls>
               <source
-                src={`https://video-streams-api.vercel.app/videos/stream/${video._id}`}
+                src={`http://localhost:5000/videos/stream/${video._id}`}
                 type="video/mp4"
               />
               Your browser does not support the video tag.
             </video>
             <div className="flex gap-28 mt-6 ml-5">
             <Link
-              to="/upload"
+              to={`/Upload/${video._id}`}
+              state={{ video }}
               className="bg-red-800 hover:bg-red-950 text-white py-2 px-4 rounded-lg text-lg"
               >
               Update
