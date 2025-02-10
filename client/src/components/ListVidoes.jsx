@@ -1,16 +1,37 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import toast from 'react-hot-toast';
+
 
 const ListVideos = () => {
   const [videos, setVideos] = useState([]);
 
   useEffect(() => {
+    fetchVideos();
+  }, []);
+
+  const fetchVideos = () => {
     axios
       .get("http://localhost:5003/videos")
       .then((response) => setVideos(response.data))
       .catch((error) => console.error("Error fetching videos:", error));
-  }, []);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await axios.delete(`http://localhost:5003/videos/${id}`);
+      console.log(response.data);  
+  
+      toast.success("Video deleted successfully", { duration: 5000 });
+  
+      setVideos((prevVideos) => prevVideos.filter((video) => video._id !== id));
+    } catch (error) {
+      console.error("Error deleting video:", error);
+      toast.error("Failed to delete video", { duration: 5000 });
+    }
+  };
+  
 
   return (
     <div
@@ -51,6 +72,21 @@ const ListVideos = () => {
               />
               Your browser does not support the video tag.
             </video>
+            <div className="flex gap-28 mt-6 ml-5">
+            <Link
+              to="/upload"
+              className="bg-red-800 hover:bg-red-950 text-white py-2 px-4 rounded-lg text-lg"
+              >
+              Update
+            </Link>
+
+              <button
+                onClick={() => handleDelete(video._id)}
+                className="bg-red-800 hover:bg-red-950 text-white py-2 px-4 rounded-lg text-lg"
+              >
+                Delete
+              </button>
+            </div>
           </div>
         ))}
       </div>

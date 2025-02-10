@@ -110,4 +110,67 @@ app.get("/videos/stream/:id", async (req, res) => {
   }
 });
 
+app.delete("/videos/:id", async (req, res) => {
+  try {
+    const video = await Video.findById(req.params.id);
+    if (!video) {
+      return res.status(404).json({ message: "Video not found" });
+    }
+
+    // Delete file from GridFS
+    await gfsBucket.delete(new ObjectId(video.fileId));
+
+    // Delete video metadata from MongoDB
+    await Video.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({ message: "Video deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting video", error });
+  }
+});
+
+
+app.put("/update/:id", upload.single("video"), async (req, res) => {
+  try {
+    const video = await Video.findById(req.params.id);
+    if (!video) {
+      return res.status(404).json({ message: "Video not found" });
+    }
+
+    // Update title and description
+    video.title = req.body.title || video.title;
+    video.description = req.body.description || video.description;
+
+    // If a new video file is uploaded, replace the existing file
+    if (req.file) {
+      // Delete old file from GridFS
+      await gfsBucket.delete(new ObjectId(video.fileId));
+
+      // Upload new video to GridFS
+      const uploadStream = gfsBucket.openUploadStream(req.file.filename);
+      const fileStream = fs.createReadStream(req.file.path);
+      fileStream.pipe(uploadStream);
+
+      uploadStream.on("finish", async () => {
+        // Remove local file after upload
+        fs.unlinkSync(req.file.path);
+
+        // Update video file details
+        video.filename = req.file.filename;
+        video.fileId = uploadStream.id;
+
+        await video.save();
+        res.status(200).json({ message: "Video updated successfully", video });
+      });
+    } else {
+      await video.save();
+      res.status(200).json({ message: "Video updated successfully", video });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error updating video", error });
+  }
+});
+
+
 app.listen(PORT, () => console.log(` Server running on port ${PORT}`));
+
