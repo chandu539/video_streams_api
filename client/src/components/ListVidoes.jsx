@@ -13,14 +13,14 @@ const ListVideos = () => {
 
   const fetchVideos = () => {
     axios
-      .get("https://video-streams-api-backend.vercel.app/videos")
+      .get("https://video-streams-api.vercel.app/videos")
       .then((response) => setVideos(response.data))
       .catch((error) => console.error("Error fetching videos:", error));
   };
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`https://video-streams-api-backend.vercel.app/videos/${id}`);
+      const response = await axios.delete(`https://video-streams-api.vercel.app/videos/${id}`);
       console.log(response.data);  
   
       toast.success("Video deleted successfully", { duration: 5000 });
@@ -67,7 +67,7 @@ const ListVideos = () => {
             <h2 className="text-xl font-bold">{video.filename}</h2>
             <video width="100%" controls>
               <source
-                src={`http://localhost:5003/videos/stream/${video._id}`}
+                src={`https://video-streams-api.vercel.app/videos/stream/${video._id}`}
                 type="video/mp4"
               />
               Your browser does not support the video tag.
